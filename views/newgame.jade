@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .container
+    h1 ¡NUEVO JUEGO!
+    p.lead Complete los datos y continuemos.
+    br
+    form(role='form', action="/newgame",method="post", style='max-width: 300px;')
+      .form-group
+          p Juego nuevo
+          input.form-control(type='text', name="GameName", placeholder='Nombre del juego')
+          br
+          p Jugador 1
+          input.form-control(type='text', name="Player1", placeholder='Nombre de usuario')
+          br
+          p Jugador 2
+          input.form-control(type='text', name="Player2", placeholder='Nombre de usuario')
+      button.btn.btn-default(type='submit') Aceptar
+      &nbsp;
+      a(href='/')
+        button.btn.btn-primary(type="button") Cancelar

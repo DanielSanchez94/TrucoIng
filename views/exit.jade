@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  .container
+    h1 ** RESULTADOS DEL JUEGO **
+    h3 #{g.player1.name} = #{g.score[0]}
+    h3 #{g.player2.name} = #{g.score[1]}
+    br
+    if (g.score[0]>g.score[1])
+      h3 ¡Gano el juego #{g.player1.name}! 
+    else
+      h3 ¡Gano el juego #{g.player2.name}! 
+    a(href='/')
+      button.button1(type="button") Inicio
+
+
+      

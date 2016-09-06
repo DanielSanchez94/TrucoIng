@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  .container
+    if (!user)
+      h1 ¡BIENVENIDO! Seleccione una de estas opciones: 
+      p.lead ** Recuerde que debe estar resgistrado para poder jugar. **
+      a(href="/register")
+        button.btn.btn-primary(type="button") Registrarme
+      br
+      br
+      a(href="/login")
+        button.btn.btn-primary(type="button") Iniciar Sesión
+    if (user)
+      h1 ¡BIENVENIDO!
+      p Usted se ha registrado como: #{user.username}
+      br
+      p.lead Seleccione una de las opciones para continuar:
+      br
+      a(href="/newgame")
+        button.btn.btn-primary(type="button") Nuevo Juego
+      br
+      br
+      a(href="/logout")
+        button.btn.btn-primary(type="button") Cerrar sesión

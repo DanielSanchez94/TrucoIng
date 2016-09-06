@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  .container
+    h1 Página de registro.
+    br
+    form(role='form', action="/register",method="post", style='max-width: 300px;')
+      .form-group
+          input.form-control(type='text', name="username", placeholder='Nombre de usuario')
+      .form-group
+        input.form-control(type='password', name="password", placeholder='Contraseña')
+      button.btn.btn-default(type='submit') Aceptar
+      &nbsp;
+      a(href='/')
+        button.btn.btn-primary(type="button") Cancelar

@@ -1,0 +1,73 @@
+extends layout
+
+block content
+  .container
+    h1 ** Puntos del juego **
+    h1 #{g.currentRound.player1.name}: #{g.score[0] + g.currentRound.score[0]} | #{g.currentRound.player2.name}: #{g.score[1] + g.currentRound.score[1]}
+    br
+    br
+    h1 **Puntos de la ronda **
+    h1 #{g.currentRound.player1.name}: #{g.currentRound.score[0]} | #{g.currentRound.player2.name}: #{g.currentRound.score[1]}
+    br
+    br
+    h1 ** RONDA **
+    if (g.currentRound.currentTurn.name === g.currentRound.player2.name) 
+      h3 Cartas jugadas de #{g.currentRound.player1.name}:
+      if  ((g.currentRound.player1.cartasJugadas[0] == undefined) && (g.currentRound.player1.cartasJugadas[1] == undefined) && (g.currentRound.player1.cartasJugadas[2] == undefined))
+        h3 #{g.currentRound.player1.name} no jugo cartas aún.
+      if (g.currentRound.player1.cartasJugadas[0] !== undefined)
+        h3 Carta - #{g.currentRound.player1.cartasJugadas[0].number} de #{g.currentRound.player1.cartasJugadas[0].suit}
+      if  (g.currentRound.player1.cartasJugadas[1] !== undefined)
+        h3 Carta - #{g.currentRound.player1.cartasJugadas[1].number} de #{g.currentRound.player1.cartasJugadas[1].suit}
+      if  (g.currentRound.player1.cartasJugadas[2] !== undefined)
+        h3 Carta - #{g.currentRound.player1.cartasJugadas[2].number} de #{g.currentRound.player1.cartasJugadas[2].suit}
+    else 
+      h2 Cartas jugadas de #{g.currentRound.player2.name}:
+      if  ((g.currentRound.player2.cartasJugadas[0] == undefined) && (g.currentRound.player2.cartasJugadas[1] == undefined) && (g.currentRound.player2.cartasJugadas[2] == undefined))
+        h3 #{g.currentRound.player2.name} no jugo cartas aún.
+      if  (g.currentRound.player2.cartasJugadas[0] !== undefined)
+        h3 Carta - #{g.currentRound.player2.cartasJugadas[0].number} de #{g.currentRound.player2.cartasJugadas[0].suit}
+      if  (g.currentRound.player2.cartasJugadas[1] !== undefined)
+        h3 Carta - #{g.currentRound.player2.cartasJugadas[1].number} de #{g.currentRound.player2.cartasJugadas[1].suit}
+      if  (g.currentRound.player2.cartasJugadas[2] !== undefined)
+        h3 Carta - #{g.currentRound.player2.cartasJugadas[2].number} de #{g.currentRound.player2.cartasJugadas[2].suit}
+    br
+    
+    h3 Es el turno de #{g.currentRound.currentTurn.name}
+    h4 Cartas del jugador:
+    h4 Carta 1- #{g.currentRound.currentTurn.cards[0].number} de #{g.currentRound.currentTurn.cards[0].suit}
+    h4 Carta 2- #{g.currentRound.currentTurn.cards[1].number} de #{g.currentRound.currentTurn.cards[1].suit}
+    h4 Carta 3- #{g.currentRound.currentTurn.cards[2].number} de #{g.currentRound.currentTurn.cards[2].suit}
+    h4 Puntos del envido: #{g.currentRound.currentTurn.envidoPoints}
+    lead Seleccione una acción para jugar.
+    br
+    br
+    form(role='form', action="/play",method="post")
+     .form-group 
+      input.form-control(type="hidden", name='gameid', value='#{g._id}')
+      if g.currentRound.fsm.can('truco')
+        input(type="submit", name="accion", value='Truco')
+      if g.currentRound.fsm.can('envido')
+        input(type="submit", name="accion", value='Envido')
+      if g.currentRound.fsm.can('quiero')
+        input(type="submit", name="accion", value='Quiero')
+      if g.currentRound.fsm.can('no-quiero')
+        input(type="submit", name="accion", value='No-quiero')
+      if g.currentRound.fsm.can('playcard')
+        if (g.currentRound.currentTurn.name === g.currentRound.player2.name)
+          if  (g.currentRound.player2.cards[0] !== 'undefined')
+            input(type="submit", name="accion", value='Jugar carta 1')
+          if  (g.currentRound.player2.cards[1] !== 'undefined')
+            input(type="submit", name="accion", value='Jugar carta 2')
+          if  (g.currentRound.player2.cards[2] !== 'undefined')  
+            input(type="submit", name="accion", value='Jugar carta 3')
+        else
+          if (g.currentRound.currentTurn.name === g.currentRound.player1.name)
+            if (g.currentRound.player1.cards[0] !== 'undefined')
+                input(type="submit", name="accion", value='Jugar carta 1')
+            if (g.currentRound.player1.cards[1] !== 'undefined')
+                input(type="submit", name="accion", value='Jugar carta 2')
+            if (g.currentRound.player1.cards[2] !== 'undefined')
+                input(type="submit", name="accion", value='Jugar carta 3')
+        
+      &nbsp;

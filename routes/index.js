@@ -148,7 +148,22 @@ router.post('/play', function(req,res){
 					}
 					if (req.body.accion == 'No-quiero'){
 						game.play(r.currentTurn,'no-quiero');	
-					}		
+					}	
+					if (req.body.accion == 'Re-Truco'){
+						game.play(r.currentTurn,'retruco');
+					}
+					if (req.body.accion == 'Vale-4'){
+						game.play(r.currentTurn,'vale4');	
+					}	
+					if (req.body.accion == 'Reviro-Envido'){
+						game.play(r.currentTurn,'envido-envido');
+					}
+					if (req.body.accion == 'Real-Envido'){
+						game.play(r.currentTurn,'realenvido');	
+					}	
+					if (req.body.accion == 'Falta-Envido'){
+						game.play(r.currentTurn,'faltaenvido');
+					}
 				}
 				else{
 						////console.log(r.currentTurn.name);
@@ -170,7 +185,7 @@ router.post('/play', function(req,res){
       						game.play(r.currentTurn,'playcard',r.currentTurn.cards[2]);   
     					}
 				}
-				
+				console.log(r.fsm.transitions());
   				if (game.currentRound.hayGanador(r.fsm.current,game) == true){
 					game.score[0] += game.currentRound.score[0];					
 					game.score[1] += game.currentRound.score[1];

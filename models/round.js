@@ -419,6 +419,26 @@ Round.prototype.checkPrevStates = function(action){
 	return aux;
 }
 
+Round.prototype.cambioTurno = function(){
+	if ((this.player1.cartasJugadas[0]!= undefined) && (this.player2.cartasJugadas[0]!= undefined) && (this.conCheqTurn[0] == false)){
+		this.conCheqTurn[0] = true;
+		if (confront(this.player1.cartasJugadas[0],this.player2.cartasJugadas[0]) == 1)
+			if (this.currentTurn.name == this.player2.name)
+				this.changeTurn();
+		if (confront(this.player1.cartasJugadas[0],this.player2.cartasJugadas[0]) == -1)
+			if (this.currentTurn.name == this.player1.name)
+				this.changeTurn();
+	}		
+	if ((this.player1.cartasJugadas[1]!= undefined)&&(this.player2.cartasJugadas[1]!= undefined) && (this.conCheqTurn[1] == false)){
+		this.conCheqTurn[1] = true;
+		if (confront(this.player1.cartasJugadas[1],this.player2.cartasJugadas[1]) == 1)
+			if (this.currentTurn.name == this.player2.name)
+				this.changeTurn();
+		if (confront(this.player1.cartasJugadas[1],this.player2.cartasJugadas[1]) == -1)
+			if (this.currentTurn.name == this.player1.name)
+				this.changeTurn();
+	}	
+}
 /*
 * Let's Play :)
 */
@@ -454,25 +474,7 @@ Round.prototype.play = function(player, action, value) {
 
 	this.changeTurn();
 	// Change player's turn
-
-	if ((this.player1.cartasJugadas[0]!= undefined) && (this.player2.cartasJugadas[0]!= undefined) && (this.conCheqTurn[0] == false)){
-		this.conCheqTurn[0] = true;
-		if (confront(this.player1.cartasJugadas[0],this.player2.cartasJugadas[0]) == 1)
-			if (this.currentTurn.name == this.player2.name)
-				this.changeTurn();
-		if (confront(this.player1.cartasJugadas[0],this.player2.cartasJugadas[0]) == -1)
-			if (this.currentTurn.name == this.player1.name)
-				this.changeTurn();
-	}		
-	if ((this.player1.cartasJugadas[1]!= undefined)&&(this.player2.cartasJugadas[1]!= undefined) && (this.conCheqTurn[1] == false)){
-		this.conCheqTurn[1] = true;
-		if (confront(this.player1.cartasJugadas[1],this.player2.cartasJugadas[1]) == 1)
-			if (this.currentTurn.name == this.player2.name)
-				this.changeTurn();
-		if (confront(this.player1.cartasJugadas[1],this.player2.cartasJugadas[1]) == -1)
-			if (this.currentTurn.name == this.player1.name)
-				this.changeTurn();
-	}
+	this.cambioTurno();
 };
 
 module.exports.round = Round;

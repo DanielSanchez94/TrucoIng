@@ -126,7 +126,7 @@ router.post('/play', function(req,res){
 		//console.log(r);
 		//console.log(r.currentTurn);
 		//console.log('Mostrando los puntos del jueoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO: ');
-		console.log(game.score);
+		//console.log(game.score);
 			if ((game.score[0] >= 6) || (game.score[1] >= 6)){
 				res.redirect('/exit?gameid=' + game._id);		 		
 			}
@@ -185,7 +185,7 @@ router.post('/play', function(req,res){
       						game.play(r.currentTurn,'playcard',r.currentTurn.cards[2]);   
     					}
 				}
-				console.log(r.fsm.transitions());
+				//console.log(r.fsm.transitions());
   				if (game.currentRound.hayGanador(r.fsm.current,game) == true){
 					game.score[0] += game.currentRound.score[0];					
 					game.score[1] += game.currentRound.score[1];

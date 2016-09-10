@@ -207,7 +207,7 @@ Round.prototype.played = function (action, card){
 				this.tirarCarta(this.player2, card);				
 				return this.player2;
 			
-		//Si el estado previo es 'quiero', 'noquiero', 'playcard', 'primer carta'
+		//Si el estado previo es 'quiero', 'no-quiero', 'playcard', 'primer carta'
 		}else if((this.prevstate == 'quiero') || (this.prevstate == 'no-quiero') || (this.prevstate == 'playcard') || (this.prevstate == 'primer-carta')) 			
 			//Si el jugador corriente es el jugador 1				
 			if (this.currentTurn.name == this.player1.name){
@@ -236,13 +236,14 @@ Round.prototype.played = function (action, card){
 
 //Compara caracter por caracter 2 arreglos segun su tamaño
 function compAr(arreglo, arreglo0){
-	aux = false;
-	if (arreglo.length == 2){
+	var aux = false;
+	if ((arreglo.length == 2) && (arreglo0.length == 2)){
 		if ((arreglo[0] == arreglo0[0]) && (arreglo[1] == arreglo0[1])){
+		//	//console.log("estoy dentro del compAr " + arreglo + " " + arreglo0 + " " + arreglo.length);
 			aux = true;
 		}	
 	}
-	if (arreglo.length == 3){
+	if ((arreglo.length == 3) && (arreglo0.length == 3)){
 		if ((arreglo[0] == arreglo0[0]) && (arreglo[1] == arreglo0[1]) && (arreglo[2] == arreglo0[2])){
 			aux = true;
 		}	
@@ -253,23 +254,38 @@ function compAr(arreglo, arreglo0){
 //Devuelve un valor booleano: True=Hay ganador, False=No hay ganador
 Round.prototype.hayGanador = function (action,game){
 	var aux = false;
-
-	if (( action== 'no-quiero') && (this.prevstate == 'truco'))
+	//console.log(action);
+	//console.log(this.prevstate);
+	if ((action == 'no-quiero') && ((this.prevstate == 'truco') || (this.prevstate == 'retruco') || (this.prevstate == 'vale4'))){
 	 	aux = true;
-
-	if (compAr(this.arregloManos,[0,0,0])){
- 		//aux = true;
-		if (game.currentHand.name == this.player1.name)
-			this.score[0] = this.puntostruco[0];
+		if (this.currentTurn.name == this.player1.name)
+			this.score[1] += this.puntostruco;
 		else
-			this.score[1] = this.puntostruco[0];
+			this.score[0] += this.puntostruco;		
 	}
 
-	if (compAr(this.arregloManos,[1,2,0]))
-		this.score[0] += this.puntostruco;
+	if ((action == 'quiero') && (this.prevstate == 'faltaenvido'))
+		aux = true;
+	
+	
+	
+	if (compAr(this.arregloManos,[0,0,0])){
+ 		aux = true;
+		if (game.currentHand.name == this.player1.name)
+			this.score[0] += this.puntostruco[0];
+		else
+			this.score[1] += this.puntostruco[0];
+	}
 
-	if (compAr(this.arregloManos,[2,1,0]))
+	if (compAr(this.arregloManos,[1,2,0])){
+		aux = true;
+		this.score[0] += this.puntostruco;
+	}
+
+	if (compAr(this.arregloManos,[2,1,0])){
+		aux = true;
 		this.score[1] += this.puntostruco;	
+	}
 		
 	if ((compAr(this.arregloManos,[0,1])) || (compAr(this.arregloManos,[1,0])) || (compAr(this.arregloManos,[0,0,1]))){
 		aux = true;
@@ -291,87 +307,91 @@ Round.prototype.hayGanador = function (action,game){
 		this.score[1] += this.puntostruco;
 
 	}
-	
+	console.log(aux);
+	////console.log("aca esta el aux" + " " +aux);
 	return aux;
 }
 
 Round.prototype.calculateEnvido = function(action){
-	if ((this.checkPrevStates == 'envido') || (this.checkPrevStates == 'envido-envido') || (this.checkPrevStates == 'realenvido') || (this.checkPrevStates == 'faltaenvido')){
+	if ((this.checkPrevStates('envido')) || (this.checkPrevStates('envido-envido')) || (this.checkPrevStates('realenvido')) || (this.checkPrevStates('faltaenvido'))){
+		//console.log("entorooentroentrooo");
 		if (this.prevstate == 'envido'){
 			//Si el estado actual 'quiero'
 			if (action == 'quiero')
 				this.pointenv = 2
-			//Si el estado actual 'noquiero' 
-			if (action == 'noquiero')
+			//Si el estado actual 'no-quiero' 
+			if (action == 'no-quiero')
 				this.pointenv = 1;
 		}	
 
 		if (this.prevstate == 'envido-envido'){
 			if (action == 'quiero')
 				this.pointenv = 4;
-			//Si el estado actual 'noquiero' 
-			if (action == 'noquiero')
+			//Si el estado actual 'no-quiero' 
+			if (action == 'no-quiero')
 				this.pointenv = 2;
 		}
 
 		if (this.prevstate == 'realenvido')
-			if (checkPrevStates('envido-envido')){
-				//Si esta el envido-envido y se quiere pointenv va a tener 7 me explico?
+			if (this.checkPrevStates('envido-envido')){
 				if (action == 'quiero')
 					this.pointenv = 7;
-				if (action == 'noquiero')
+				if (action == 'no-quiero')
 					this.pointenv = 4;	
 			}else
-				if (checkPrevStates('envido')){
+				if (this.checkPrevStates('envido')){
 					if (action == 'quiero') 
 						this.pointenv = 5;	
-					if (action == 'noquiero') 
+					if (action == 'no-quiero') 
 						this.pointenv = 2;	
 				}else{
 					if (action == 'quiero') 
 						this.pointenv = 3;	
-					if (action == 'noquiero') 
+					if (action == 'no-quiero') 
 						this.pointenv = 1;				
 				}	
 
 		if (this.prevstate == 'faltaenvido'){
-			if ((checkPrevStates('envido-envido')) && (checkPrevStates('realenvido')))
-				if (action == 'noquiero')
+			if ((this.checkPrevStates('envido-envido')) && (this.checkPrevStates('realenvido')))
+				if (action == 'no-quiero'){	
 					this.pointenv = 7;
+				}	
 			else
-				if ((checkPrevStates('envido')) && (checkPrevStates('realenvido')))
-					if (action == 'noquiero')
+				if ((this.checkPrevStates('envido')) && (this.checkPrevStates('realenvido')))
+					if (action == 'no-quiero')
 						this.pointenv = 5;
 				else
-					if (checkPrevStates('envido-envido'))
-						if (action == 'noquiero')
+					if (this.checkPrevStates('envido-envido'))
+						if (action == 'no-quiero')
 							this.pointenv = 4;
 					else
-						if (checkPrevStates('envido'))
-							if (action == 'noquiero')
+						if (this.checkPrevStates('envido'))
+							if (action == 'no-quiero')
 								this.pointenv = 2;
 						else
-							if (action == 'noquiero')
+							if (action == 'no-quiero')
 								this.pointenv = 1;
 			if (action == 'quiero'){
-
+				this.pointenv = 6; //Dar opciones para jugar distinto tipo de truco (6,12,15)
 			}
 				
 				//this.pointenv = this.puntosParaPartido(game);
 		}
 
 		
-		
-		if (action == 'quiero')
-			if (this.puntosWin() == this.player1.name)
-				this.score[0] += pointenv; 
-			else
-				this.score[1] += pointenv; 				
-		else
-			if (this.currentTurn.name == this.player2.name)
-				this.score[0] += pointenv; 
-			else	
-				this.score[1] += pointenv;
+		if ((this.prevstate == 'envido') || (this.prevstate == 'envido-envido') || (this.prevstate == 'realenvido') || (this.prevstate == 'faltaenvido')){	
+			if (action == 'quiero')
+				if (this.puntosWin() == this.player1.name)
+					this.score[0] += this.pointenv; 
+				else
+					this.score[1] += this.pointenv; 				
+			else 
+				if (action == 'no-quiero')
+					if (this.currentTurn.name == this.player2.name)
+						this.score[0] += this.pointenv; 
+					else
+						this.score[1] += this.pointenv;
+		}
 	}	
 	return this.score;
 }
@@ -386,15 +406,14 @@ Round.prototype.cantoTruco = function(action){
 }
 
 Round.prototype.calculateTruco = function(action){
-	if ((action == 'quiero') && ((this.prevstate == 'truco') || (this.prevstate == 'retruco') || (this.prevstate == 'vale4'))) 
-		if (this.vartruco != undefined){
+	if ((action == 'quiero') && ((this.prevstate == 'truco') || (this.prevstate == 'retruco') || (this.prevstate == 'vale4'))){ 
+		if ((this.vartruco != undefined)&&(this.varretruco == undefined)&&(this.vale4 == undefined))
 			this.puntostruco = 2;
-			if (this.varretruco != undefined){
-				this.puntostruco = 3;
-				if (this.vale4 != undefined)
-					this.puntostruco = 4;
-			}
-		}	
+		if ((this.varretruco != undefined)&&(this.vale4 == undefined))
+			this.puntostruco = 3;
+		if (this.vale4 != undefined)
+			this.puntostruco = 4;
+	}	
 }
 /*Round.prototype.puntosParaPartido = function (game){
 	if (this.puntosWin() == this.player1.name)
@@ -408,18 +427,31 @@ Round.prototype.calculateTruco = function(action){
 }*/	
 
 Round.prototype.checkPrevStates = function(action){
-	var estados =  this.estadosPrevios;
-	aux = false;
-
-	do{
-		var ultimoEstado = estados.pop();	
-		if (ultimoEstado == action)
-			aux = true;	
-	}while ((ultimoEstado != undefined) && (aux == false));	
+	var aux=false;
+	i=0;
+	while (i < this.estadosPrevios.length){
+		if(action == this.estadosPrevios[i])
+			aux=true;
+		i++;
+	}
+    //console.log(aux);
 	return aux;
+	//preguntar que pasa si no le pongo var
+	/*estados=[];
+	for (i = 0; i < this.estadosPrevios.lenght; i++) {
+    	estados.push(this.estadosPrevios[i]);
+	}
+	aux = false;
+	do{
+		if (estados.pop == action)
+			aux = true;	
+	}while ((estados = []) && (aux == false));	
+	console.log(this.estadosPrevios)
+	return aux;*/
 }
 
 Round.prototype.cambioTurno = function(){
+	this.changeTurn();
 	if ((this.player1.cartasJugadas[0]!= undefined) && (this.player2.cartasJugadas[0]!= undefined) && (this.conCheqTurn[0] == false)){
 		this.conCheqTurn[0] = true;
 		if (confront(this.player1.cartasJugadas[0],this.player2.cartasJugadas[0]) == 1)
@@ -450,8 +482,8 @@ Round.prototype.play = function(player, action, value) {
 	// move to the next state
 	this.fsm[action](player, value);
 
-	this.estadosPrevios.push(action); 
-	console.log(this.estadosPrevios);
+	this.estadosPrevios.push(action);
+	//console.log(this.estadosPrevios);
 	//check if is needed play a card
 	this.played(action,value);
 	//this.played(action,value);
@@ -465,14 +497,14 @@ Round.prototype.play = function(player, action, value) {
 
 	//check the confrontations
 	this.confrontaciones();	
-
+	//console.log(this.arregloManos);
 	//check the status of hands
 	/*if (this.hayGanador() == 1)
 		return(this.player1);	
 	if (this.hayGanador() == 2)
 		return(this.player2); */
 
-	this.changeTurn();
+	
 	// Change player's turn
 	this.cambioTurno();
 };

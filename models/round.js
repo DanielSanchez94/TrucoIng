@@ -511,4 +511,4 @@ Round.prototype.play = function(player, action, value) {
 
 module.exports.round = Round;
 
-//probando vinculo PiiivotalTracker con Github
+//probando vinculo PiiiivotalTracker con Github

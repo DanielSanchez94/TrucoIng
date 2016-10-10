@@ -80,4 +80,4 @@ Game.prototype.switchPlayer = function(){
 
 module.exports.game = Game;
 
-
+//facu probando jaja esto ssimularia la resolucion de la historia que copie el id,

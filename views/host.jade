@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  .container
+    h1 ¡Creando Juego!
+    p.lead Complete los datos y continuemos.
+    br
+    form(role='form', action="/host",method="post", style='max-width: 300px;')
+      .form-group
+          p Juego nuevo
+          input.form-control(type='text', name="GameName", placeholder='Nombre del juego')
+          br
+      button.btn.btn-default(type='submit') Aceptar
+      &nbsp;
+      a(href='/')
+        button.btn.btn-primary(type="button") Cancelar

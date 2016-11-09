@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  .container
+    h1 ¡Juegos disponibles!
+    br
+    h1 Seleccione el juego que desea unirse!
+    br
+    form(role='form', action="/lobby",method="post")
+     .form-group 
+       - for (var i=0; i<g.length; i++)
+         input.form-control(type="hidden", name='gameid', value=g[i]["_id"])
+         input(type="submit", name="accion", value=g[i]["name"])       

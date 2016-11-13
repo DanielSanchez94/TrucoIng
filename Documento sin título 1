@@ -1,0 +1,168 @@
+extends layout
+
+block content
+  .container-play
+    .puntos
+      h1 Puntos
+      p #{juego.player1.getName()}: #{juego.score[0]}
+      p #{juego.player2.getName()}: #{juego.score[1]}
+    if juego.score[0] >= 15 || juego.score[1] >= 15
+      h1 SE TERMINO LA PARTIDA
+      p ganador: #{p1}
+      a(href="/") Home
+    else if juego.score[1] >= 15
+      h1 SE TERMINO LA PARTIDA
+      p ganador: #{p2}
+      a(href="/") Home
+    else
+      if juego.currentRound.status == "stop"
+        h1 SE TERMINO LA MANO
+        a(href="/newRound") Proxima Ronda
+      else
+        //lugar que va a representar la mesa (cartas jugadas)
+        .mesa
+          h1 Mesa
+          table
+            each i in juego.currentRound.cartasJugadas()
+              td 
+                img(src="/img/cartas/#{i.show()}")
+        // muestro las cartas que tiene disponible un jugador
+        if juego.player2.name == null
+          h1 Esperando oponente
+        .posiblesJugadas
+          h1 Posbiles Jugadas
+          if juego.player1 == juego.currentRound.currentTurn && us == p1
+            table
+              tr(style="text-align:center;")
+                if juego.currentRound.currentTurn.card1 !== null
+                  td
+                    p #1 
+                if juego.currentRound.currentTurn.card2 !== null
+                  td
+                    p #2
+                if juego.currentRound.currentTurn.card3 !== null
+                  td
+                    p #3 
+              tr
+                if juego.currentRound.currentTurn.card1 !== null
+                  td
+                      img(src="/img/cartas/#{juego.player1.card1.show()}")
+                if juego.currentRound.currentTurn.card2 !== null
+                  td
+                      img(src="/img/cartas/#{juego.player1.card2.show()}")
+                if juego.currentRound.currentTurn.card3 !== null
+                  td   
+                      img(src="/img/cartas/#{juego.player1.card3.show()}")
+            br
+            p Puntos del envido: #{juego.player1.pointsCards}
+            form(role='form', action="/play",method="post")
+              input(type="hidden", name="idPartida", value="#{juego._id}")
+              // si envido es un estado posible, entonces se mostrara.
+              // si quiero es un estado posible, entonces se mostrara.
+              // si no-quiero es un estado posible, entonces se mostrara.
+              // si truco es un estado posible, entonces se mostrara.
+              // si EnvidoEnvido es un estado posible, entonces se mostrara.
+              // si reTruco es un estado posible, entonces se mostrara
+              #{a = juego.currentRound.posiblesStates()}
+              each item in a
+                if item == "playCard"
+                  if juego.currentRound.currentTurn.card1 !== null
+                    input#carta1.btn.btn-default(type="submit", name="action", value="Jugar Carta #1")
+                  if juego.currentRound.currentTurn.card2 !== null
+                    input#carta2.btn.btn-default(type="submit", name="action", value="Jugar Carta #2")
+                  if juego.currentRound.currentTurn.card3 !== null
+                    input#carta3.btn.btn-default(type="submit", name="action", value="Jugar Carta #3")
+                else
+                  if item == "truco"
+                    if juego.currentRound.esTruco !== true
+                      input#truco.btn.btn-default(type="submit", name="action", value="#{item}")
+                  else
+                    if item == "reTruco"
+                      if juego.currentRound.esReTruco !== true
+                        input#retruco.btn.btn-default(type="submit", name="action", value="#{item}")  
+                    else
+                      input#jugada.btn.btn-default(type="submit", name="action", value="#{item}")
+              &nbsp;
+          if juego.player2 == juego.currentRound.currentTurn && us == p2
+            table
+              tr(style="text-align:center;")
+                if juego.currentRound.currentTurn.card1 !== null
+                  td
+                    p #1 
+                if juego.currentRound.currentTurn.card2 !== null
+                  td
+                    p #2
+                if juego.currentRound.currentTurn.card3 !== null
+                  td
+                    p #3   
+              tr
+                if juego.currentRound.currentTurn.card1 !== null
+                  td
+                      img(src="/img/cartas/#{juego.player2.card1.show()}")
+                if juego.currentRound.currentTurn.card2 !== null
+                  td
+                      img(src="/img/cartas/#{juego.player2.card2.show()}")
+                if juego.currentRound.currentTurn.card3 !== null
+                  td
+                      img(src="/img/cartas/#{juego.player2.card3.show()}")
+            p Puntos del envido: #{juego.player2.pointsCards}
+            form(role='form', action="/play",method="post")
+              input(type="hidden", name="idPartida", value="#{juego._id}")
+              // si envido es un estado posible, entonces se mostrara.
+              // si quiero es un estado posible, entonces se mostrara.
+              // si no-quiero es un estado posible, entonces se mostrara.
+              // si truco es un estado posible, entonces se mostrara.
+              // si EnvidoEnvido es un estado posible, entonces se mostrara.
+              // si reTruco es un estado posible, entonces se mostrara.
+              #{a = juego.currentRound.posiblesStates()}
+              each item in a
+                if item == "playCard"
+                  if juego.currentRound.currentTurn.card1 !== null
+                    input#carta1.btn.btn-default(type="submit", name="action", value="Jugar Carta #1")
+                  if juego.currentRound.currentTurn.card2 !== null
+                    input#carta2.btn.btn-default(type="submit", name="action", value="Jugar Carta #2")
+                  if juego.currentRound.currentTurn.card3 !== null
+                    input#carta3.btn.btn-default(type="submit", name="action", value="Jugar Carta #3")
+                else
+                  if item == "truco"
+                    if juego.currentRound.esTruco !== true
+                      input#truco.btn.btn-default(type="submit", name="action", value="#{item}")
+                  else
+                    if item == "reTruco"
+                      if juego.currentRound.esReTruco !== true
+                        input#retruco.btn.btn-default(type="submit", name="action", value="#{item}")  
+                    else
+                      input#jugada.btn.btn-default(type="submit", name="action", value="#{item}")
+              &nbsp;
+  script(src='https://cdn.socket.io/socket.io-1.4.5.js')
+  script(src='http://code.jquery.com/jquery-1.11.1.js')
+  script.
+    var socket = io();
+    $('#carta1').click(function(){
+      socket.emit('chat message', $("#carta1").val());
+    });
+
+    $('#carta2').click(function(){
+      socket.emit('chat message', $("#carta2").val());
+    });
+
+    $('#carta3').click(function(){
+      socket.emit('chat message', $("#carta3").val());
+    });
+
+    $('#truco').click(function(){
+      socket.emit('chat message', $("#truco").val());
+    });
+
+    $('#retruco').click(function(){
+      socket.emit('chat message', $("#retruco").val());
+    });
+
+
+    $('#jugada').click(function(){
+      socket.emit('chat message', $("#jugada").val());
+    });
+
+    socket.on('chat message', function(msg){
+      location.reload();
+    });

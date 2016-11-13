@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  .container
+    h1 ¡Esperando contrincante!
+    br
+    form(role='form', action="/espera",method="post")
+     .form-group 
+      input.form-control(type="hidden", name='gameid', value='#{g._id}')
+      input(type="submit", name="accion", value='Actualizar')
+    br

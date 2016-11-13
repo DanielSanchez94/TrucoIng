@@ -111,27 +111,56 @@ Round.prototype.guardarCarta = function (player, card){
  		this.player1.cartasJugadas.push(card);
 	}else
 		this.player2.cartasJugadas.push(card);
-	//console.log(player);
 }
 
 //Toma un jugador y la carta, devuelve el arreglo de las cartas del jugador sin la carta que jugó
-Round.prototype.tirarCarta = function (player,card){
-        //console.log(player.cards[0]);
-	//console.log(card);
-	//console.log(player.cards[0] === card);
-	//console.log(player);	
-	if ((player.cards[0].number == card.number) && (player.cards[0].suit == card.suit)){
-		this.currentTurn.cartasJugadas[0] = undefined;
-		return player;
-	}
-	if ((player.cards[1].number == card.number) && (player.cards[1].suit == card.suit)){
-		this.currentTurn.cartasJugadas[1] = undefined;
-		return player;
-	}
-	if ((player.cards[2].number == card.number) && (player.cards[2].suit == card.suit)){
-		this.currentTurn.cartasJugadas[2] = undefined;
-		return player;
+Round.prototype.tirarCarta = function (player,card){	
+	if (this.player1.name == player.name){	
+		console.log('------------------------'); 		
+		console.log(this.player1.cards[0]);
+		console.log(card);
+		console.log(this.player1.cards[0] === card);
+		console.log(this.player1.cards[0] == card);
+		console.log('------------------------');
+		if (this.player1.cards[0] != null){				
+			if ((this.player1.cards[0].number == card.number) && (this.player1.cards[0].suit == card.suit)){
+				this.player1.cards[0] = undefined;
+				return player;
+			}
+		}
+		if (this.player1.cards[1] != null){
+			if ((this.player1.cards[1].number == card.number) && (this.player1.cards[1].suit == card.suit)){
+				this.player1.cards[1] = undefined;
+				return player;
+			}
+		}
+		if (this.player1.cards[2] != null){
+			if ((this.player1.cards[2].number == card.number) && (this.player1.cards[2].suit == card.suit)){
+				this.player1.cards[2] = undefined;
+				return player;
+			}
+		}
 	}	
+	if (this.player2.name == player.name){	
+		if (this.player2.cards[0] != null){
+			if ((this.player2.cards[0].number == card.number) && (this.player2.cards[0].suit == card.suit)){
+				this.player2.cards[0] = undefined;
+				return player;
+			}
+		}
+		if (this.player2.cards[1] != null){
+			if ((this.player2.cards[1].number == card.number) && (this.player2.cards[1].suit == card.suit)){
+				this.player2.cards[1] = undefined;
+				return player;
+			}
+		}
+		if (this.player1.cards[2] != null){
+			if ((this.player2.cards[2].number == card.number) && (this.player2.cards[2].suit == card.suit)){
+				this.player2.cards[2] = undefined;
+				return player;
+			}
+		}	
+	}
 }
 
 //Nos indica si un jugador tiro todas las cartas.

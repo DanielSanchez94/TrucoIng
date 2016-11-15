@@ -71,6 +71,7 @@ router.post('/host', function(req,res){
     }  
     console.log(game._id);
     res.redirect('/espera?gameid=' + game._id);
+<<<<<<< HEAD
   });
 });
 
@@ -102,6 +103,42 @@ router.post('/lobby/:id', function(req,res){
   });
 });
 
+=======
+  });
+});
+
+/* GET lobby page */
+router.get('/lobby', function(req,res){
+    Game.find(function(err,game){
+    //for (var i = game.length - 1; i >= 0; i--) 
+      //console.log(game[i]["name"]);
+      //console.log(game.length);
+    if (err)
+      console.log(err);
+    else
+      res.render('lobby', {g : game});
+  });  
+});
+
+/* POST lobby page */
+router.post('/lobby', function(req,res){
+  Game.findOne({_id: req.body.gameid},function(err,game){
+    var p2 = new Player (req.session.passport.user);
+    //Aca esta el problema dani, porque esta guardando el player2 pero no se como resolverlo, yo tampoco. Lo que se me ocurre a priori es ir viendo como hacer para esos botones asociarles un campo o un parametro es conocer un poquito de htm nada mas y ya estaria, porque de esa manera no tendriamos que verlo tan abstracto , bueno, éro cucha, de ultima lo vemos esta noche, ahora subi lo que hay, con la base de datos eliminada y toda la onda queres? Dale pero pasame el y haceme manejar tu tterminal jaja dale dale ahi te paso pero primero pasame el rar
+    //para descomprimirlo. Mandamelo por fave
+    
+    game.player2 = p2;
+    console.log(game.player2.name);
+    game.currentHand = p2;
+    game.save(function(err,game){
+      console.log(game.player2.name);
+      res.redirect ('/espera?gameid=' + req.body.gameid);
+    });
+    //Game.update({ _id: req.body.gameid[2]}, { $set :{player2 : p2, currentHand : p2}},function (err,resultado){     
+    });
+});
+
+>>>>>>> branchforwebsocket
 /* GET espera page */
 router.get('/espera', function(req,res){
   Game.findOne({_id:req.query.gameid},function(err,game){
@@ -134,7 +171,13 @@ router.get('/play',function(req,res){
   console.log('VENIMOS BIEN !');
   var g = Game.findOne({_id:req.query.gameid},function(err,game){
     if (err)
+<<<<<<< HEAD
         console.log(err);  
+=======
+        console.log(err);
+    console.log(game.player1.name);
+    console.log(game.player2.name);  
+>>>>>>> branchforwebsocket
     var currentRound = game.currentRound;
     var r = game.currentRound;
     r.__proto__ = Round.prototype;    
@@ -151,6 +194,7 @@ router.get('/play',function(req,res){
 router.post('/play', function(req,res){
 	////console.log("Hola, estoy dentro del post de play");
 	Game.findOne({_id:req.body.gameid},function(err,game){
+<<<<<<< HEAD
 		console.log('ACA ESTOY');
 		io.on('connection', function(socket){
 			console.log('Esta conectado el socket');
@@ -207,6 +251,75 @@ router.post('/play', function(req,res){
 				console.log(game.currentRound.player1.cards);
     				console.log(game.currentRound.player2.cards);
 				if (game.currentRound.hayGanador(r.fsm.current,game) == true){
+=======
+        var currentRound = game.currentRound;
+    		var r = game.currentRound;
+    		r.__proto__ = Round.prototype;    
+    		r.fsm = r.newTrucoFSM(r.fsm.current);
+    	//console.log(r.fsm.transitions());
+        //console.log(r.fsm);
+        //game.currentRound.fsm = game.currentRound.newTrucoFSM();
+		if(err){
+		    //console.log("Aca tenemos el error de recursividad.");
+      		//console.log(err);
+        	}
+        //Game.hydrate(game.currentRound); 
+        //console.log(r.fsm);
+		//console.log(r);
+		//console.log(r.currentTurn);
+		//console.log('Mostrando los puntos del jueoOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO: ');
+		//console.log(game.score);
+			if ((game.score[0] >= 6) || (game.score[1] >= 6)){
+				res.redirect('/exit?gameid=' + game._id);		 		
+			}
+			else{
+			////console.log('Estoy dentro del juego');
+      			////console.log(game.currentRound.fsm.cannot('truco'));
+				////console.log(req.body.accion);
+				//console.log(game.currentRound.fsm.current);
+				if (req.body.accion !== 'Jugar carta 1' && req.body.accion !== 'Jugar carta 2' && req.body.accion !== 'Jugar carta 3'){
+					if (req.body.accion == 'Truco'){
+						game.play(r.currentTurn,'truco');
+					}
+					if (req.body.accion == 'Envido'){
+						game.play(r.currentTurn,'envido');
+					}
+
+					if (req.body.accion == 'Quiero'){
+						game.play(r.currentTurn,'quiero');
+					}
+					if (req.body.accion == 'No-quiero'){
+						game.play(r.currentTurn,'no-quiero');	
+					}	
+					if (req.body.accion == 'Re-Truco'){
+						game.play(r.currentTurn,'retruco');
+					}
+					if (req.body.accion == 'Vale-4'){
+						game.play(r.currentTurn,'vale4');	
+					}	
+					if (req.body.accion == 'Reviro-Envido'){
+						game.play(r.currentTurn,'envido-envido');
+					}
+					if (req.body.accion == 'Real-Envido'){
+						game.play(r.currentTurn,'realenvido');	
+					}	
+					if (req.body.accion == 'Falta-Envido'){
+						game.play(r.currentTurn,'faltaenvido');
+					}
+				}
+				else{			
+					if (req.body.accion == 'Jugar carta 1'){
+      						game.play(r.currentTurn,'playcard',r.currentTurn.cards[0]);	
+    					}
+    					if (req.body.accion == 'Jugar carta 2'){
+      						game.play(r.currentTurn,'playcard',r.currentTurn.cards[1]);   
+    					}
+    					if (req.body.accion == 'Jugar carta 3'){
+      						game.play(r.currentTurn,'playcard',r.currentTurn.cards[2]);   
+    					}
+				}
+					if (game.currentRound.hayGanador(r.fsm.current,game) == true){
+>>>>>>> branchforwebsocket
 					game.score[0] += game.currentRound.score[0];					
 					game.score[1] += game.currentRound.score[1];
 					if ((game.score[0] >= 6) || (game.score[1] >= 6))
@@ -214,9 +327,15 @@ router.post('/play', function(req,res){
 				        	//console.log(game.score);   			
 							res.redirect ('/exit?gameid=' + game._id);
         					});		 		
+<<<<<<< HEAD
 			      		else
 						Game.update({ _id: game._id }, { $set :{score : game.score, currentRound:r}},function (err,resultado){	 
 							res.redirect ('/finRonda?gameid=' + game._id);
+=======
+			      				else{
+						Game.update({ _id: game._id }, { $set :{score : game.score, currentRound:r}},function (err,resultado){	 
+						res.redirect ('/finRonda?gameid=' + game._id);
+>>>>>>> branchforwebsocket
         					});
 				}else							
 					Game.update({ _id: game._id }, { $set :{score : game.score ,currentRound:r}},function (err,resultado){    

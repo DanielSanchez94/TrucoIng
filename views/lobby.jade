@@ -6,7 +6,15 @@ block content
     br
     h1 Seleccione el juego que desea unirse!
     br
+<<<<<<< HEAD
     - for (var i=0; i<g.length; i++)
       form(role='form', action="/lobby/#{g[i]._id}",method="post")
         .form-group
           input(type="submit", name="accion", value=g[i]["name"])
+=======
+    form(role='form', action="/lobby",method="post")
+     .form-group 
+       - for (var i=0; i<g.length; i++)
+         input.form-control(type="hidden", name='gameid', value=g[i]["_id"])
+         input(type="submit", name="accion", value=g[i]["name"])       
+>>>>>>> branchforwebsocket

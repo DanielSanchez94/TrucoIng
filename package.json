@@ -27,5 +27,19 @@
     "passport-local-mongoose": "^4.0.0",
     "serve-favicon": "~2.3.0",
     "socket.io": "~1.5.0"
+<<<<<<< HEAD
+=======
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/DanielSanchez94/TrucoIng.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DanielSanchez94/TrucoIng/issues"
+>>>>>>> branchforwebsocket
   }
 }
